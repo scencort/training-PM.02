@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QWidget, QMessageBox
 from PyQt6.uic import loadUi
-from db.database import get_connection
+from pizzeria.db.database import get_connection
 
 
 class LoginWindow(QWidget):
