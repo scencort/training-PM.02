@@ -1,14 +1,16 @@
 import sys
-from PyQt6.QtWidgets import QApplication
-from windows.login_window import LoginWindow
+from PyQt6.QtWidgets import QApplication, QWidget
+from windows.login_ui import Ui_LoginWindow
 
 
 def main():
     app = QApplication(sys.argv)
 
-    window = LoginWindow()
-    window.show()
+    window = QWidget()
+    ui = Ui_LoginWindow()
+    ui.setupUi(window)
 
+    window.show()
     sys.exit(app.exec())
 
 

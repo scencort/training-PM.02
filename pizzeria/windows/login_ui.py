@@ -7,6 +7,7 @@
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QMessageBox
+from pizzeria.windows.client_ui import Ui_ClientWindow
 import pymysql
 
 class Ui_LoginWindow(object):
@@ -38,6 +39,10 @@ class Ui_LoginWindow(object):
 
         self.retranslateUi(LoginWindow)
         QtCore.QMetaObject.connectSlotsByName(LoginWindow)
+
+        self.parent = LoginWindow
+        self.btn_login.clicked.connect(self.check_user)
+        self.btn_guest.clicked.connect(self.login_as_guest)
 
     def retranslateUi(self, LoginWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -83,23 +88,19 @@ class Ui_LoginWindow(object):
                 role = "Гость"
 
             QMessageBox.information(None, "Успех", f"Вход выполнен\nРоль: {role}")
+
+            if role_id == 2:
+                self.client_window = QtWidgets.QWidget()
+                self.client_ui = Ui_ClientWindow()
+                self.client_ui.setupUi(self.client_window)
+
+                self.client_ui.user_id = user["user_id"]
+
+                self.client_window.show()
+                self.parent.hide()
+
         else:
             QMessageBox.warning(None, "Ошибка", "Неверный логин или пароль")
 
     def login_as_guest(self):
         QMessageBox.information(None, "Гость", "Вход выполнен как гость")
-
-if __name__ == "__main__":
-    import sys
-
-    app = QtWidgets.QApplication(sys.argv)
-
-    window = QtWidgets.QWidget()
-    ui = Ui_LoginWindow()
-    ui.setupUi(window)
-
-    ui.btn_login.clicked.connect(ui.check_user)
-    ui.btn_guest.clicked.connect(ui.login_as_guest)
-
-    window.show()
-    sys.exit(app.exec())
