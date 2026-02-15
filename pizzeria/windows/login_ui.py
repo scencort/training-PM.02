@@ -8,6 +8,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QMessageBox
 from pizzeria.windows.client_ui import Ui_ClientWindow
+from pizzeria.db.database import get_connection
 import pymysql
 
 class Ui_LoginWindow(object):
@@ -56,15 +57,9 @@ class Ui_LoginWindow(object):
         login = self.lineEdit_username.text()
         password = self.lineEdit_password.text()
 
-        connection = pymysql.connect(
-            host="localhost",
-            user="root",
-            password="2281337",
-            database="pizzeria",
-            cursorclass=pymysql.cursors.DictCursor
-        )
-
+        connection = get_connection()
         cursor = connection.cursor()
+
         cursor.execute(
             "SELECT * FROM Users WHERE username = %s AND password_hash = %s",
             (login, password)
